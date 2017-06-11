@@ -1,10 +1,25 @@
 # frozen_string_literal: true
 require "listen"
 
-module Roda::RodaPlugins
+module Roda::RodaPlugins # :nodoc:
+  # The live_reload plugin provides a chunked-body endpoint and injects a
+  # long-polling JavaScript function just before the closing body tag.
+  #
+  #   plugin :live_reload
+  #
+  #   route do |r|
+  #     r.live_reload
+  #   end
+  #
+  # = Plugin Options
+  #
+  # The following plugin options are supported:
+  #
+  # :watch :: Array of folders to watch. Defaults to +assets+, +views+
+  #
   module LiveReload
-    module ResponseMethods
-      INJECT = <<~EOM
+    module ResponseMethods # :nodoc:
+      INJECT = <<~EOM # :nodoc:
       <script>
         (function reconnect() {
           var xhr = new XMLHttpRequest();
@@ -30,7 +45,7 @@ module Roda::RodaPlugins
       </script>
       EOM
 
-      def finish
+      def finish # :nodoc:
         status, headers, content = super
 
         content = content.map do |chunk|
@@ -48,6 +63,7 @@ module Roda::RodaPlugins
     end
 
     module RequestMethods
+      # Setup the live reload endpoint
       def live_reload(opts = {}, &block)
         on("_live_reload") do
           reader, writer = IO.pipe
@@ -63,24 +79,28 @@ module Roda::RodaPlugins
       end
     end
 
-    def self.mutex
+    def self.mutex # :nodoc:
       @mutex ||= Mutex.new
     end
 
-    def self.synchronize
+    def self.synchronize # :nodoc:
       mutex.synchronize { yield }
     end
 
-    def self.listeners
+    def self.listeners # :nodoc:
       @listeners ||= []
     end
 
-    def self.load_dependencies(app, opts = {})
+    def self.load_dependencies(app, opts = {}) # :nodoc:
       app.plugin :streaming
     end
 
-    def self.configure(app, opts = {})
-      listener = Listen.to("assets", "views") do |modified, added, removed|
+    def self.configure(app, opts = {}) # :nodoc:
+      watch = opts.delete(:watch) || ["assets", "views"]
+
+      puts "Watching #{watch} for changes"
+
+      listener = Listen.to(*watch) do |modified, added, removed|
         puts "Changes", modified, added, removed
 
         LiveReload.listeners.each do |writer|

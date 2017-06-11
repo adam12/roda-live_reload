@@ -25,7 +25,6 @@ likely want to only enable it during development.
 
 
 ```ruby
-
 class App < Roda
   development = ENV.fetch("RACK_ENV", "development") == "development"
 
@@ -37,6 +36,7 @@ class App < Roda
     r.root { "Root" }
   end
 end
+```
 
 ## Contributing
 
