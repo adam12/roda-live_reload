@@ -49,8 +49,8 @@ module Roda::RodaPlugins # :nodoc:
         status, headers, content = super
 
         content = content.map do |chunk|
-          if chunk.include?("</body>")
-            chunk.sub("</body>", INJECT + "</body>")
+          if chunk.include?("</head>")
+            chunk.sub("</head>", INJECT + "</head>")
           else
             chunk
           end
