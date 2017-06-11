@@ -4,6 +4,7 @@ Gem::Specification.new do |spec|
   spec.authors        = ["Adam Daniels"]
   spec.email          = "adam@mediadrive.ca"
 
+  spec.homepage       = "https://github.com/adam12/roda-live_reload"
   spec.summary        = %q(Live reloading for Roda)
   spec.license        = "MIT"
 
