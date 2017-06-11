@@ -20,7 +20,23 @@ Or install it yourself as:
 
 ## Usage
 
+After enabling the plugin, simply call `r.live_reload` inside your routing tree. You'll
+likely want to only enable it during development.
 
+
+```ruby
+
+class App < Roda
+  development = ENV.fetch("RACK_ENV", "development") == "development"
+
+  plugin :live_reload if development
+
+  route do |r|
+    r.live_reload if development
+
+    r.root { "Root" }
+  end
+end
 
 ## Contributing
 
