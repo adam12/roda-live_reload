@@ -56,7 +56,7 @@ module Roda::RodaPlugins # :nodoc:
           end
         end
 
-        headers["Content-Length"] = content.reduce(0) { |memo, chunk| memo + chunk.size }.to_s
+        headers["Content-Length"] = content.reduce(0) { |memo, chunk| memo + chunk.bytesize }.to_s
 
         [status, headers, content]
       end
