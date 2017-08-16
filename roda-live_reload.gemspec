@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.files          = ["README.md"] + Dir["lib/**/*.rb"]
   spec.require_paths  = ["lib"]
 
-  spec.add_dependency "roda", ">= 2.0.0"
+  spec.add_dependency "roda", ">= 2.0", "< 5.0"
   spec.add_dependency "listen", ">= 3.0.0"
 
   spec.add_development_dependency "rubygems-tasks", "~> 0.2"
