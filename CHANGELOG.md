@@ -1,4 +1,6 @@
 ## master
+- Better shutdown handling
+- Handle listener disconnects cleanly
 
 ## 0.1.2 (2017-08-16)
 - Relax Roda dependency
