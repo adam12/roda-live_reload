@@ -104,7 +104,13 @@ module Roda::RodaPlugins # :nodoc:
         puts "Changes", modified, added, removed
 
         LiveReload.listeners.each do |writer|
-          writer.puts "Changes"
+          begin
+            writer.puts "Changes"
+          rescue Errno::EPIPE
+            LiveReload.synchronize do
+              LiveReload.listeners.delete(writer)
+            end
+          end
         end
       end
 
