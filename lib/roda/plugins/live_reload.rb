@@ -73,7 +73,13 @@ module Roda::RodaPlugins # :nodoc:
           end
 
           scope.stream(loop: true) do |out|
-            out << reader.gets
+            if defined?(Puma::Server) && Puma::Server.current.shutting_down?
+              out.close
+            end
+
+            if IO.select([reader], nil, nil, 0)
+              out << reader.read_nonblock(1)
+            end
           end
         end
       end
@@ -105,7 +111,7 @@ module Roda::RodaPlugins # :nodoc:
 
         LiveReload.listeners.each do |writer|
           begin
-            writer.puts "Changes"
+            writer << 1
           rescue Errno::EPIPE
             LiveReload.synchronize do
               LiveReload.listeners.delete(writer)
