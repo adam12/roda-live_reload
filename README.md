@@ -38,6 +38,10 @@ class App < Roda
 end
 ```
 
+## Caveats
+
+Live Reloading mechanism may not work with Webrick. Tested with Puma.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/adam12/roda-live_reload.
