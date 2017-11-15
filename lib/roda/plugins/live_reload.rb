@@ -77,7 +77,7 @@ module Roda::RodaPlugins # :nodoc:
               out.close
             end
 
-            if IO.select([reader], nil, nil, 0)
+            if IO.select([reader], nil, nil, 1)
               out << reader.read_nonblock(1)
             end
           end
