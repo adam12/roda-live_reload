@@ -1,4 +1,5 @@
 ## master
+- Increase select timeout to 1 second
 - Better shutdown handling
 - Handle listener disconnects cleanly
 
