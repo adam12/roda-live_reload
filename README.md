@@ -42,6 +42,9 @@ end
 
 Live Reloading mechanism may not work with Webrick. Tested with Puma.
 
+A new SIGINT trap is set per request, possibly bulldozing any previously set SIGINT.
+This may not be an issue for most, but it's something to be aware of.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/adam12/roda-live_reload.
