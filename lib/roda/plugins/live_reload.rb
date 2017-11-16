@@ -72,6 +72,7 @@ module Roda::RodaPlugins # :nodoc:
       # Setup the live reload endpoint
       def live_reload(opts = {}, &block)
         on("_live_reload") do
+          logger.info "Live Reload listener attached" if logger
           reader, writer = IO.pipe
 
           LiveReload.synchronize do
