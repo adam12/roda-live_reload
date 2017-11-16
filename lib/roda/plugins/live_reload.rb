@@ -79,11 +79,10 @@ module Roda::RodaPlugins # :nodoc:
             LiveReload.listeners.push(writer)
           end
 
-          scope.stream(loop: true) do |out|
-            if defined?(Puma::Server) && Puma::Server.current.shutting_down?
-              out.close
-            end
+          # I wish Rack would provide a shutdown indicator
+          trap(:INT) { exit }
 
+          scope.stream(loop: true) do |out|
             if IO.select([reader], nil, nil, 1)
               out.close
             else
