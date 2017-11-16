@@ -26,7 +26,14 @@ module Roda::RodaPlugins # :nodoc:
 
           xhr.open("GET", "/_live_reload", true);
 
-          xhr.onprogress = function() {
+          xhr.onprogress = function(e) {
+            /* Try to prevent memory leak */
+            if (e.loaded > 1000) {
+              window.location.reload();
+            }
+          };
+
+          xhr.onload = function(e) {
             window.location.reload();
           };
 
@@ -35,10 +42,9 @@ module Roda::RodaPlugins # :nodoc:
             setTimeout(reconnect, 1000);
           };
 
-          xhr.onabort = function() {
-            console.log("Reconnecting after abort");
-            setTimeout(reconnect, 1000);
-          };
+          window.addEventListener("beforeunload", function(e) {
+            xhr.abort();
+          }, true);
 
           xhr.send();
         })();
@@ -78,8 +84,14 @@ module Roda::RodaPlugins # :nodoc:
             end
 
             if IO.select([reader], nil, nil, 1)
-              out << reader.read_nonblock(1)
+              out.close
+            else
+              out << 0
             end
+          end
+
+          LiveReload.synchronize do
+            LiveReload.listeners.delete(writer)
           end
         end
       end
