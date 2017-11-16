@@ -1,4 +1,9 @@
 ## master
+
+## 0.2.0 (2017-11-16)
+- Make our own SIGINT trap
+- Try to log listener connection if possible
+- Change wire communication strategy
 - Increase select timeout to 1 second
 - Better shutdown handling
 - Handle listener disconnects cleanly
